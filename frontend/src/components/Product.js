@@ -13,6 +13,10 @@ const Product = ({
   rating,
   numReviews,
 }) => {
+  // const img = image.map((pic) => pic);
+  // console.log(image);
+  // const img = image.slice(0, 1);
+  // console.log(img);
   return (
     <Card style={{ width: '16rem', marginTop: '2rem' }}>
       <Link to={`/product/${id}`}>

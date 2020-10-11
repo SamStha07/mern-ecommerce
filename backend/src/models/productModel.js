@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 
-// const User = require('./userModel');
-// const Category = require('./categoryModel');
-
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -37,6 +34,8 @@ const productSchema = new mongoose.Schema(
       ref: 'Category',
       required: [true, 'A product must have category'],
     },
+    rating: { type: Number, default: 0 },
+    featuredImage: { type: String, required: true },
     productImages: [{ img: { type: String } }],
     reviews: [
       {
@@ -44,13 +43,15 @@ const productSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User',
         },
-        review: String,
+        name: { type: String, required: true },
+        rating: { type: Number, required: true },
+        comment: { type: String, required: true },
       },
     ],
+    numReviews: { type: Number, default: 0 },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      //   required: true,
     },
     updatedAt: Date,
   },

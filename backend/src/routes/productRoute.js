@@ -6,6 +6,7 @@ const shortid = require('shortid');
 const {
   createProduct,
   getAllProducts,
+  getSingleProduct,
 } = require('../controllers/productController');
 const { adminMiddleware, requireSignIn } = require('../middlewares/auth');
 
@@ -27,10 +28,12 @@ router.post(
   '/create',
   requireSignIn,
   adminMiddleware,
+  upload.single('featuredImage'),
   upload.array('productImages'),
   createProduct,
 );
 
 router.get('/', getAllProducts);
+router.get('/:id', getSingleProduct);
 
 module.exports = router;

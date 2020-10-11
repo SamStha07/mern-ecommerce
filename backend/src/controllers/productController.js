@@ -7,7 +7,6 @@ const Product = require('../models/productModel');
 
 // create product
 exports.createProduct = catchAsync(async (req, res, next) => {
-  // res.status(201).json({ files: req.files, body: req.body });
   let { productImages } = req.body;
   const createdBy = req.user.id;
 
@@ -35,9 +34,15 @@ exports.createProduct = catchAsync(async (req, res, next) => {
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   const products = await Product.find();
 
-  res.status(200).json({
-    status: 'success',
-    results: products.length,
-    products,
-  });
+  res.status(200).json(products);
+});
+
+exports.getSingleProduct = catchAsync(async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new AppError('Product not found', 404));
+  }
+
+  res.status(200).json(product);
 });

@@ -1,30 +1,54 @@
-import React from 'react';
+import axios from '../helpers/axios';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-import products from '../products';
 import Product from '../components/Product';
+import { listProducts } from '../actions/productActions';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 
-const Homepage = () => {
+const Homepage = (props) => {
+  useEffect(() => {
+    console.log(props.listProducts());
+    props.listProducts();
+    console.log('after fetching');
+  }, []);
+
+  const { products, loading, error } = props.productList;
+  // console.log(products);
+
   return (
     <>
       <h1>Latest Products</h1>
-      <Row>
-        {products.map((product) => (
-          <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-            <Product
-              id={product._id}
-              name={product.name}
-              description={product.description}
-              price={product.price}
-              image={product.image}
-              rating={product.rating}
-              numReviews={product.numReviews}
-            />
-          </Col>
-        ))}
-      </Row>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <Row>
+          {products.map((product) => (
+            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+              <Product
+                id={product._id}
+                name={product.name}
+                description={product.description}
+                price={product.price}
+                image={product.productImage}
+                rating={product.rating}
+                numReviews={product.numReviews}
+              />
+            </Col>
+          ))}
+        </Row>
+      )}
     </>
   );
 };
 
-export default Homepage;
+function mapStateToProps(state) {
+  // console.log(state.productList);
+  return { productList: state.productList };
+}
+
+export default connect(mapStateToProps, { listProducts })(Homepage);
