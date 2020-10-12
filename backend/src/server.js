@@ -36,15 +36,6 @@ app.use('/api/category', categoryRoute);
 app.use('/api/product', productRoute);
 app.use('/api/user/cart', cartRoute);
 
-// // dummy api
-// app.get('/api/products', (req, res) => {
-//   res.json(products);
-// });
-// app.get('/api/products/:id', (req, res) => {
-//   const product = products.find((p) => p._id === req.params.id);
-//   res.json(product);
-// });
-
 // middleware for unknown route to show error for all HTTPHeaders
 // Global error handling Middleware
 app.all('*', (req, res, next) => {

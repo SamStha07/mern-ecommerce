@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Homepage from './containers/Homepage';
 import ProductPage from './containers/ProductPage';
+import CartPage from './containers/CartPage';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       <main className="py-3">
         <Container>
           <Route path="/" exact component={Homepage} />
-          <Route path="/product/:id" component={ProductPage} />
+          <Route path="/product/:id" exact component={ProductPage} />
+          <Route path="/cart/:id?" exact component={CartPage} />
         </Container>
       </main>
       <Footer />

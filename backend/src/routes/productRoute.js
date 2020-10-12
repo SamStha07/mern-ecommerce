@@ -28,7 +28,7 @@ router.post(
   '/create',
   requireSignIn,
   adminMiddleware,
-  upload.single('featuredImage'),
+  // upload.single('featuredImage'),
   upload.array('productImages'),
   createProduct,
 );

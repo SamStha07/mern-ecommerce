@@ -8,6 +8,7 @@ const Product = require('../models/productModel');
 // create product
 exports.createProduct = catchAsync(async (req, res, next) => {
   let { productImages } = req.body;
+  // let featuredImage = req.file;
   const createdBy = req.user.id;
 
   productImages = [];
@@ -18,8 +19,14 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     });
   }
 
+  // featuredImage ={}
+  // if(req.file.featuredImage){
+  //   return
+  // }
+
   const newProduct = await Product.create({
     ...req.body,
+    // featuredImage,
     productImages,
     createdBy,
   });
