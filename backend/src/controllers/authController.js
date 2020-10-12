@@ -7,19 +7,24 @@ const AppError = require('../utils/appError');
 
 // Create new user
 exports.signup = catchAsync(async (req, res, next) => {
-  const { firstName, lastName, email, password } = req.body;
-  const newUser = await User.create({
-    firstName,
-    lastName,
+  const { name, email, password } = req.body;
+
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    return next(new AppError('User already exists', 400));
+  }
+
+  const user = await User.create({
+    name,
     email,
     password,
-    username: Math.random().toString(),
   });
 
   // create token of the current user
   const token = jwt.sign(
     {
-      id: newUser._id,
+      id: user._id,
     },
     process.env.JWT_SECRET,
     {
@@ -30,9 +35,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     token,
-    data: {
-      user: newUser,
-    },
+    user,
   });
 });
 
@@ -71,6 +74,6 @@ exports.login = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     token,
-    data: user,
+    user,
   });
 });

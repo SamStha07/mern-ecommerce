@@ -20,7 +20,6 @@ import Message from '../components/Message';
 const ProductPage = (props) => {
   const [qty, setQty] = useState(1);
 
-  console.log(props);
   const { match, history } = props;
 
   useEffect(() => {
