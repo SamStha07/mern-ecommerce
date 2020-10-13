@@ -33,14 +33,14 @@ exports.requireSignIn = catchAsync(async (req, res, next) => {
 });
 
 exports.userMiddleware = catchAsync(async (req, res, next) => {
-  if (req.user.role !== 'user') {
+  if (req.user.isAdmin !== false) {
     return res.status(400).json({ message: 'Must be a user' });
   }
   next();
 });
 
 exports.adminMiddleware = catchAsync(async (req, res, next) => {
-  if (req.user.role !== 'admin') {
+  if (req.user.isAdmin !== true) {
     return res.status(400).json({ message: 'Must be a admin' });
   }
   next();

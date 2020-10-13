@@ -8,11 +8,15 @@ import FormContainer from '../components/Form';
 
 import { register } from '../actions/userActions';
 
-const LoginPage = ({ history, location }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const RegisterPage = ({ history, location }) => {
   const [name, setName] = useState('');
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState(null);
+
+  // REDUX
   const dispatch = useDispatch();
 
   const userRegister = useSelector((state) => state.userRegister);
@@ -29,6 +33,9 @@ const LoginPage = ({ history, location }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setMessage('Password do not match');
+    }
     dispatch(register(name, email, password));
   };
 
@@ -69,6 +76,17 @@ const LoginPage = ({ history, location }) => {
           ></Form.Control>
         </Form.Group>
 
+        <Form.Group controlId="confirmPassword">
+          <Form.Label>Enter Confirm Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Enter password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          ></Form.Control>
+          {message && <Message variant="danger">{message}</Message>}
+        </Form.Group>
+
         <Button type="submit" variant="primary">
           Sign Up
         </Button>
@@ -77,4 +95,4 @@ const LoginPage = ({ history, location }) => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

@@ -77,3 +77,73 @@ exports.login = catchAsync(async (req, res, next) => {
     user,
   });
 });
+
+// GET User Profile
+exports.getUserProfile = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    return next(new AppError('User not found', 404));
+  }
+});
+
+// UPDATE USER PROFILE
+exports.updateUserProfile = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    const token = jwt.sign(
+      {
+        id: updatedUser._id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      },
+    );
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token,
+    });
+  } else {
+    return next(new AppError('User not found', 404));
+  }
+});
+
+// GET All Users
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find();
+
+  console.log(users);
+  res.status(200).json(users);
+});
+
+// DELETE User
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+
+  if (!user) {
+    return next(new AppError('No user found with that Id', 404));
+  }
+
+  res.status(204).json(user);
+});
