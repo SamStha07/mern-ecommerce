@@ -1,5 +1,4 @@
-import axios from '../helpers/axios';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -10,9 +9,7 @@ import Message from '../components/Message';
 
 const Homepage = (props) => {
   useEffect(() => {
-    console.log(props.listProducts());
     props.listProducts();
-    console.log('after fetching');
   }, []);
 
   const { products, loading, error } = props.productList;

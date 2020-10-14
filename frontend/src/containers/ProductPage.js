@@ -12,7 +12,6 @@ import {
 import { connect } from 'react-redux';
 
 import Rating from '../components/Rating';
-import axios from '../helpers/axios';
 import { productDetail } from '../actions/productActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';

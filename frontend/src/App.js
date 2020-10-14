@@ -12,6 +12,7 @@ import LoginPage from './containers/LoginPage';
 import RegisterPage from './containers/RegisterPage';
 import ProfilePage from './containers/ProfilePage';
 import UserListPage from './containers/UserListPage';
+import UserEditPage from './containers/UserEditPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/register" exact component={RegisterPage} />
           <Route path="/profile" exact component={ProfilePage} />
           <Route path="/admin/userlist" exact component={UserListPage} />
+          <Route path="/admin/user/:id/edit" exact component={UserEditPage} />
         </Container>
       </main>
       <Footer />

@@ -19,10 +19,15 @@ import {
   USER_REGISTER_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
-  USER_UPDATE_PROFILE_RESET,
   USER_UPDATE_PROFILE_SUCCESS,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_FAIL,
+  USER_UPDATE_RESET,
+  USER_UPDATE_PROFILE_RESET,
 } from '../constants/userConstants';
 import axios from '../helpers/axios';
+import history from '../history';
 
 export const login = (email, password) => async (dispatch, getState) => {
   try {
@@ -59,11 +64,18 @@ export const logout = () => async (dispatch) => {
     type: USER_LOGOUT,
   });
   dispatch({
+    type: USER_UPDATE_PROFILE_RESET,
+  });
+  dispatch({
     type: USER_DETAILS_RESET,
   });
   dispatch({
     type: USER_LIST_RESET,
   });
+  dispatch({
+    type: USER_UPDATE_RESET,
+  });
+  history.push('/');
 };
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -241,7 +253,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.delete(`/users/${id}`, config);
+    await axios.delete(`/users/${id}`, config);
 
     dispatch({
       type: USER_DELETE_SUCCESS,
@@ -260,6 +272,51 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 
     dispatch({
       type: USER_DELETE_FAIL,
+      payload: message,
+    });
+  }
+};
+
+export const updateUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/users/${user._id}`, user, config);
+
+    dispatch({
+      type: USER_UPDATE_SUCCESS,
+    });
+
+    dispatch({
+      type: USER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    if (message === 'Not authorized, token failed') {
+      dispatch({
+        type: USER_LOGOUT,
+      });
+    }
+
+    dispatch({
+      type: USER_UPDATE_FAIL,
       payload: message,
     });
   }

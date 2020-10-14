@@ -147,3 +147,36 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
   res.status(204).json(user);
 });
+
+// GET User by ID
+exports.getUserById = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id).select('-password');
+
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    return next(new AppError('User not found', 404));
+  }
+});
+
+// UPDATE USER
+exports.updateUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin || user.isAdmin;
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    return next(new AppError('User not found', 404));
+  }
+});

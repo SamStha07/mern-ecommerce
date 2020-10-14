@@ -34,7 +34,7 @@ const Cart = (props) => {
     if (productId) {
       dispatch(addToCart(productId, qty));
     }
-  }, [productId, qty]);
+  }, [productId, qty, dispatch]);
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));

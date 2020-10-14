@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button, Tab } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Message from '../components/Message';
@@ -33,7 +33,7 @@ const UserListPage = ({ history }) => {
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, successDelete]);
+  }, [dispatch, history, successDelete, userInfo]);
 
   const deleteHandler = (id) => {
     dispatch(deleteUser(id));
@@ -73,7 +73,7 @@ const UserListPage = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/user/${user._id}/edit`}>
+                  <LinkContainer to={`/admin/user/${user._id}/edit`}>
                     <Button variant="light" className="btn-sm">
                       <i className="fas fa-edit" />
                     </Button>

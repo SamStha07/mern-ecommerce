@@ -6,6 +6,8 @@ const {
   updateUserProfile,
   getAllUsers,
   deleteUser,
+  getUserById,
+  updateUser,
 } = require('../controllers/authController.js');
 const { requireSignIn, adminMiddleware } = require('../middlewares/auth');
 
@@ -16,6 +18,11 @@ router.post('/login', login);
 router.get('/profile/:id', requireSignIn, getUserProfile);
 router.put('/profile', requireSignIn, updateUserProfile);
 router.get('/', requireSignIn, adminMiddleware, getAllUsers);
-router.delete('/:id', requireSignIn, adminMiddleware, deleteUser);
+
+router
+  .route('/:id')
+  .delete(requireSignIn, adminMiddleware, deleteUser)
+  .get(requireSignIn, adminMiddleware, getUserById)
+  .put(requireSignIn, adminMiddleware, updateUser);
 
 module.exports = router;
